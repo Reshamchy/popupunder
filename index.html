@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Popup Under Ad</title>
+  <title>Daily Claim + Popup Under Ad</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
@@ -30,25 +30,46 @@
       font-size: 16px;
       cursor: pointer;
     }
+
+    .claimed {
+      color: green;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
 
   <div class="notice">
-    <p>Click the button below to continue:</p>
-    <button onclick="triggerPopupAd()">Continue</button>
+    <p id="claimStatus">Click below to claim your daily reward.</p>
+    <button id="claimBtn" onclick="claimDailyPoints()">Claim & Continue</button>
   </div>
 
-  <!-- Popup Under Ad Script -->
   <script type="text/javascript">
+    function hasClaimedToday() {
+      const lastClaim = localStorage.getItem('lastClaimDate');
+      const today = new Date().toDateString();
+      return lastClaim === today;
+    }
+
+    function claimDailyPoints() {
+      if (hasClaimedToday()) {
+        alert("You have already claimed your daily points.");
+      } else {
+        const today = new Date().toDateString();
+        localStorage.setItem('lastClaimDate', today);
+        alert("You have claimed your daily points!");
+      }
+
+      // Then trigger popup ad
+      triggerPopupAd();
+    }
+
     function triggerPopupAd() {
-      // Trigger popup-under ad script
       let s = document.createElement('script');
       s.src = "//pl26624781.profitableratecpm.com/9a/8b/99/9a8b992dbc0d3849d69e864b2d9fa0f8.js";
       document.body.appendChild(s);
-
-      // You can also redirect or load content here if needed
-      alert("Popup ad triggered (check your browser's tab or window)");
+      document.getElementById("claimStatus").innerHTML = "Claimed ✅";
+      document.getElementById("claimStatus").classList.add("claimed");
     }
   </script>
 
